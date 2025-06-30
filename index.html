@@ -1,0 +1,72 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NSAvet</title>
+  <style>
+    body { font-family: Arial; background: #f4f4f4; padding: 2rem; color: #333; }
+    h2 { color: #2e7d32; }
+    .section { background: #fff; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem; box-shadow: 0 0 10px #ccc; }
+    input, textarea { width: 100%; padding: 0.7rem; margin: 0.5rem 0; border-radius: 5px; border: 1px solid #ccc; }
+    button { background: #ff6d00; color: white; padding: 0.7rem 1.5rem; border: none; border-radius: 5px; cursor: pointer; }
+    button:hover { background: #e65c00; }
+    .card { background: #e8f5e9; padding: 1rem; border-left: 5px solid #2e7d32; margin: 0.5rem 0; border-radius: 6px; }
+    .delete-btn { float: right; background: red; padding: 0.2rem 0.5rem; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <h1>NSAvet 🐾</h1>
+  <div class="section">
+    <h2>Cadastro de Pacientes</h2>
+    <input id="nome" placeholder="Nome do animal">
+    <input id="sexo" placeholder="Sexo">
+    <input id="raca" placeholder="Raça">
+    <input id="idade" placeholder="Idade">
+    <input id="peso" placeholder="Peso">
+    <input id="especie" placeholder="Espécie">
+    <button onclick="salvar()">Salvar</button>
+    <div id="lista"></div>
+  </div>
+  <script>
+    function salvar() {
+      const dados = {
+        nome: document.getElementById('nome').value,
+        sexo: document.getElementById('sexo').value,
+        raca: document.getElementById('raca').value,
+        idade: document.getElementById('idade').value,
+        peso: document.getElementById('peso').value,
+        especie: document.getElementById('especie').value
+      };
+      const lista = JSON.parse(localStorage.getItem('pacientes') || '[]');
+      lista.push(dados);
+      localStorage.setItem('pacientes', JSON.stringify(lista));
+      mostrar();
+    }
+    function excluir(i) {
+      const lista = JSON.parse(localStorage.getItem('pacientes') || '[]');
+      lista.splice(i, 1);
+      localStorage.setItem('pacientes', JSON.stringify(lista));
+      mostrar();
+    }
+    function mostrar() {
+      const lista = JSON.parse(localStorage.getItem('pacientes') || '[]');
+      document.getElementById('lista').innerHTML = '';
+      lista.forEach((p, i) => {
+        document.getElementById('lista').innerHTML += `
+          <div class="card">
+            <b>Nome:</b> ${p.nome} <button class="delete-btn" onclick="excluir(${i})">Excluir</button><br>
+            <b>Sexo:</b> ${p.sexo}<br>
+            <b>Raça:</b> ${p.raca}<br>
+            <b>Idade:</b> ${p.idade}<br>
+            <b>Peso:</b> ${p.peso}<br>
+            <b>Espécie:</b> ${p.especie}
+          </div>
+        `;
+      });
+    }
+    mostrar();
+  </script>
+</body>
+</html>
